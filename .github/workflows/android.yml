@@ -42,7 +42,8 @@ jobs:
           npx cap sync android
 
       - name: Build debug APK
-        run: bash android/gradlew assembleDebug
+        working-directory: android
+        run: bash gradlew assembleDebug
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -50,3 +51,4 @@ jobs:
           name: warm-warehouse-sokoban-android-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+

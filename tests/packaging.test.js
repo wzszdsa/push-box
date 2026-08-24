@@ -53,3 +53,8 @@ test('repository includes a reproducible Android CI build workflow', () => {
   assert.match(yaml, /assembleDebug/);
   assert.match(yaml, /upload-artifact/);
 });
+
+test('Android workflow runs Gradle from the native project directory', () => {
+  const yaml = readFileSync(resolve(root, '.github', 'workflows', 'android.yml'), 'utf8');
+  assert.match(yaml, /working-directory:\s*android/);
+});
