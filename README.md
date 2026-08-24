@@ -40,3 +40,32 @@ node --check .\app.js
 - `app.js`：界面渲染和交互
 - `assets/`：人物与木箱图片素材
 - `tests/`：核心逻辑与素材引用测试
+
+## PC 与 Android 打包
+
+### Windows x64
+
+```powershell
+npm run desktop:make
+```
+
+产物位于 `release/desktop/make/`：
+
+- `squirrel.windows/x64/warm-warehouse-sokoban-Setup.exe`：Windows 安装包
+- `zip/win32/x64/warm-warehouse-sokoban-win32-x64-1.0.0.zip`：便携版
+
+### Android
+
+本地需要 JDK 17、Android SDK 和 Gradle；同步工程：
+
+```powershell
+npm run android:sync
+```
+
+生成本地 debug APK：
+
+```powershell
+npm run android:build
+```
+
+GitHub Actions 会在每次推送到 `main` 后构建 Android debug APK，并将 APK 作为工作流 artifact 保存。正式签名和应用商店发布不包含在当前版本中。

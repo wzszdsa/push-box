@@ -4,3 +4,11 @@ node_modules/
 work-*-prompt.txt
 
 work-netlify-openapi.json
+dist/
+release/
+android/.gradle/
+android/app/build/
+android/build/
+
+work/
+
