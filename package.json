@@ -1,0 +1,8 @@
+{
+  "name": "warm-warehouse-sokoban",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
