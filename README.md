@@ -56,7 +56,7 @@ npm run desktop:make
 
 ### Android
 
-本地需要 JDK 17、Android SDK 和 Gradle；同步工程：
+本地需要 JDK 21、Android SDK 和 Gradle；同步工程：
 
 ```powershell
 npm run android:sync
@@ -69,3 +69,4 @@ npm run android:build
 ```
 
 GitHub Actions 会在每次推送到 `main` 后构建 Android debug APK，并将 APK 作为工作流 artifact 保存。正式签名和应用商店发布不包含在当前版本中。
+

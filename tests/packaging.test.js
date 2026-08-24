@@ -58,3 +58,8 @@ test('Android workflow runs Gradle from the native project directory', () => {
   const yaml = readFileSync(resolve(root, '.github', 'workflows', 'android.yml'), 'utf8');
   assert.match(yaml, /working-directory:\s*android/);
 });
+
+test('Android workflow uses Java 21 required by the native dependency toolchain', () => {
+  const yaml = readFileSync(resolve(root, '.github', 'workflows', 'android.yml'), 'utf8');
+  assert.match(yaml, /java-version:\s*'21'/);
+});
