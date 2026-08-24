@@ -1,6 +1,21 @@
+const ignoredProjectPaths = [
+  /[\\/]node_modules(?:[\\/]|$)/,
+  /[\\/]android(?:[\\/]|$)/,
+  /[\\/]tests(?:[\\/]|$)/,
+  /[\\/]scripts(?:[\\/]|$)/,
+  /[\\/]docs(?:[\\/]|$)/,
+  /[\\/]release(?:[\\/]|$)/,
+  /[\\/]work(?:[\\/]|$)/,
+  /[\\/]\.git(?:[\\/]|$)/,
+  /[\\/]\.netlify(?:[\\/]|$)/,
+  /[\\/](?:package-lock\.json|README\.md|\.gitignore|capacitor\.config\.ts)$/,
+];
+
 module.exports = {
   packagerConfig: {
     asar: true,
+    prune: true,
+    ignore: ignoredProjectPaths,
     name: 'warm-warehouse-sokoban',
     executableName: 'warm-warehouse-sokoban',
     appBundleId: 'com.wzszdsa.pushbox',

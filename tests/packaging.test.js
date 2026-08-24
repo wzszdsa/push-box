@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const require = createRequire(import.meta.url);
 const dist = resolve(root, 'dist');
 const requiredFiles = [
   'index.html',
@@ -15,7 +17,7 @@ const requiredFiles = [
   'assets/crate.png',
 ];
 
-test('static bundle contains every runtime file used by native wrappers', () => {
+ test('static bundle contains every runtime file used by native wrappers', () => {
   for (const relativePath of requiredFiles) {
     const absolutePath = resolve(dist, relativePath);
     assert.equal(existsSync(absolutePath), true, `missing dist/${relativePath}`);
@@ -62,4 +64,25 @@ test('Android workflow runs Gradle from the native project directory', () => {
 test('Android workflow uses Java 21 required by the native dependency toolchain', () => {
   const yaml = readFileSync(resolve(root, '.github', 'workflows', 'android.yml'), 'utf8');
   assert.match(yaml, /java-version:\s*'21'/);
+});
+
+test('Capacitor remains a build-time dependency for the desktop package', () => {
+  const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
+  assert.equal(packageJson.dependencies?.['@capacitor/android'], undefined);
+  assert.equal(packageJson.dependencies?.['@capacitor/core'], undefined);
+  assert.equal(typeof packageJson.devDependencies?.['@capacitor/android'], 'string');
+  assert.equal(typeof packageJson.devDependencies?.['@capacitor/core'], 'string');
+  const forgeConfig = readFileSync(resolve(root, 'forge.config.cjs'), 'utf8');
+  assert.match(forgeConfig, /prune:\s*true/);
+});
+
+test('desktop ignore rules exclude non-runtime project directories', () => {
+  const forgeConfig = require(resolve(root, 'forge.config.cjs'));
+  const rules = forgeConfig.packagerConfig.ignore;
+  assert.equal(Array.isArray(rules), true);
+  const ignored = (candidate) => rules.some((rule) => rule.test(candidate));
+  assert.equal(ignored('C:/Temp/app/node_modules/@capacitor/android/index.js'), true);
+  assert.equal(ignored('C:/Temp/app/android/settings.gradle'), true);
+  assert.equal(ignored('C:/Temp/app/dist/index.html'), false);
+  assert.equal(ignored('C:/Temp/app/desktop/main.cjs'), false);
 });
